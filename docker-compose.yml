@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  optibot:
+    build: .
+    env_file: .env
+    volumes:
+      - ./articles:/app/articles
+      - ./logs:/app/logs
+    command: ["--cron"]
+    restart: "no"
+
+  optibot-web:
+    build: .
+    env_file: .env
+    volumes:
+      - ./articles:/app/articles
+      - ./logs:/app/logs
+    ports:
+      - "8080:8080"
+    command: []
+    restart: "unless-stopped"

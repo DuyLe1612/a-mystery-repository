@@ -1,0 +1,11 @@
+# Python dependencies
+requests>=2.31.0
+python-dotenv>=1.0.0
+openai>=1.82.1
+beautifulsoup4>=4.12.3
+markdown>=3.5.2
+python-slugify[unidecode]>=8.0.4
+html2text>=2020.1.16
+flask>=3.0.0
+flask-apscheduler>=1.13.1
+gunicorn>=21.0.0
