@@ -20,6 +20,7 @@ RUN mkdir -p articles
 # Set Python to run unbuffered
 ENV PYTHONUNBUFFERED=1
 
-# Default command: run full job (scrape + upload), then exit
-# For scheduled jobs: docker run optibot python main.py --cron
+# Default command: cron with defaults (limit=30, priority=youtube)
+# Override in docker-compose or docker run: cron [--limit N] [--priority kw]
 ENTRYPOINT ["python", "main.py"]
+CMD ["cron"]
