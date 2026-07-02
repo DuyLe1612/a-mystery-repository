@@ -21,7 +21,7 @@ import sys
 import time
 import argparse
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 
 from flask import Flask, jsonify
 from flask_apscheduler import APScheduler
