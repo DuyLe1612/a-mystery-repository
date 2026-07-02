@@ -69,6 +69,6 @@ Article URL: [exact URL]
 ```
 
 ## Daily Job
-
+https://drive.google.com/drive/folders/1YqbaHChu63FzmQhtVnCZ4LRAs358wGFy
 ## Sample Q&A
 ![Assistant Screenshot](screenshots/sample_question.png)
