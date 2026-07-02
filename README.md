@@ -63,3 +63,4 @@ Article URL: [exact URL]
 ## Daily Job
 
 ## Sample Q&A
+![Assistant Screenshot](screenshots/sample_question.png)
