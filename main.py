@@ -5,7 +5,7 @@ Flexible run modes:
   scrape      - Scrape articles from Zendesk
   upload      - Upload existing markdown files to vector store
   full        - Scrape + Upload (default)
-  cron        - Scrape ALL articles + upload (for scheduled jobs)
+  cron        - Scrape articles + upload (for scheduled jobs, supports --limit --priority)
 
 Usage:
   python main.py                    # Full pipeline (scrape + upload)
@@ -223,8 +223,13 @@ def run_full(limit: int = None) -> bool:
         return False
 
 
-def run_cron() -> bool:
-    """Scheduled job: Scrape ALL articles + upload delta."""
+def run_cron(limit: Optional[int] = None, priority_keywords: Optional[List[str]] = None) -> bool:
+    """Scheduled job: Scrape articles + upload delta.
+    
+    Args:
+        limit: Number of articles to scrape (None = all)
+        priority_keywords: Keywords to prioritize
+    """
     start_time = time.time()
     try:
         logger.info("=" * 60)
@@ -232,7 +237,7 @@ def run_cron() -> bool:
         logger.info("=" * 60)
 
         scraper = ArticleScraper(config)
-        result = scraper.scrape_articles(limit=None)  # Scrape ALL
+        result = scraper.scrape_articles(limit=limit, priority_keywords=priority_keywords)
 
         logger.info(f"[CRON] Scraped - Added: {len(result.added)}, Modified: {len(result.modified)}, Skipped: {len(result.skipped)}, Failed: {result.failed}")
 
@@ -392,7 +397,7 @@ Examples:
     elif args.mode == "upload":
         success = run_uploader()
     elif args.mode == "cron":
-        success = run_cron()
+        success = run_cron(limit=limit, priority_keywords=priority_keywords)
     else:
         success = run_full(limit=limit)
 
