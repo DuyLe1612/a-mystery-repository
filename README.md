@@ -19,8 +19,11 @@ OPENAI_API_KEY=...
 ## Run Locally
 
 ```bash
-# Full pipeline: scrape ALL articles + upload delta
+# Cron (default: 30 articles, priority youtube) - runs once and exits
 python main.py cron
+
+# Override defaults
+python main.py cron --limit 50 --priority youtube,google
 
 # Scrape only
 python main.py scrape --all                    # all articles
@@ -36,6 +39,11 @@ python main.py full --limit 50
 
 # Start web server (with built-in scheduler)
 python main.py
+```
+
+**Docker:**
+```bash
+docker run -e OPENAI_API_KEY=sk-... optibot cron
 ```
 
 ## Create Assistant

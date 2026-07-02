@@ -237,7 +237,15 @@ def run_cron(limit: Optional[int] = None, priority_keywords: Optional[List[str]]
         logger.info("=" * 60)
 
         scraper = ArticleScraper(config)
-        result = scraper.scrape_articles(limit=limit, priority_keywords=priority_keywords)
+        
+        # Use priority method if keywords provided, otherwise use standard
+        if priority_keywords:
+            # Build priority dict: youtube=1, google=2, etc.
+            keywords_priority = {kw: i+1 for i, kw in enumerate(priority_keywords)}
+            keywords_priority[""] = 100  # default priority
+            result = scraper.scrape_articles_priority(limit=limit, keywords_priority=keywords_priority)
+        else:
+            result = scraper.scrape_articles(limit=limit)
 
         logger.info(f"[CRON] Scraped - Added: {len(result.added)}, Modified: {len(result.modified)}, Skipped: {len(result.skipped)}, Failed: {result.failed}")
 
@@ -377,12 +385,13 @@ Examples:
 
     args = parser.parse_args()
 
-    # Parse priority keywords
-    priority_keywords = None
-    if args.priority:
-        priority_keywords = [kw.strip().lower() for kw in args.priority.split(",")]
+    # Parse priority keywords (default: youtube for cron)
+    if args.mode == "cron":
+        priority_keywords = args.priority.split(",") if args.priority else ["youtube"]
+    else:
+        priority_keywords = [kw.strip().lower() for kw in args.priority.split(",")] if args.priority else None
     
-    # Determine limit
+    # Determine limit (default: 30 for cron, None for others)
     limit = None
     if args.all:
         limit = None
@@ -390,6 +399,8 @@ Examples:
         limit = args.limit
     elif args.mode == "scrape":
         limit = config.COUNT_ARTICLES
+    elif args.mode == "cron":
+        limit = 30  # Default for cron: 30 articles
 
     # Run based on mode
     if args.mode == "scrape":

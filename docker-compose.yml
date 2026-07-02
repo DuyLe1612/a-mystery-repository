@@ -7,7 +7,7 @@ services:
     volumes:
       - ./articles:/app/articles
       - ./logs:/app/logs
-    command: ["cron", "--limit", "30", "--priority", "youtube"]
+    command: ["cron"]
     restart: "no"
 
   optibot-web:
